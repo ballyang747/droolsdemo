@@ -1,20 +1,41 @@
 package book.discount
 import com.example.demo.discount.Order
- 
-//规则一：所购图书总价在100元以下的没有优惠
-rule "book_discount_1"
-    when
-        $order:Order(originalPrice > 100)
+
+import java.util.Calendar;
+import java.util.Date;
+import java.lang.*;
+import java.util.concurrent.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+
+//  posplan.plan_code:
+// - first 2 character = TB and DONE
+// - fifth character = P  done
+function double f_decimal_round(double valueInput) {
+     BigDecimal decimal = new BigDecimal(String.valueOf(valueInput)).setScale(2, BigDecimal.ROUND_HALF_UP);
+	return   decimal.doubleValue();
+}
+// - and request type = L1002
+// - then insert PE185   && Remark matches "\\w{4}A,B,C"
+//规则3 测试字符串
+rule "book_discount_3"
+    when   
+       //$order:Order(Remark matches "^[A,B,C].*$")
+         $order:Order("555.45" == f_decimal_round($order.getRealPrice()))
+      // $StringTest:StringTest(test1 ==  $order.getRemark());
+        //
+
     then
-        $order.setRealPrice($order.getOriginalPrice());
-        System.out.println("成功匹配到规则一：100000");
+
+
+        System.out.println("mingzhong");
+   System.out.println(f_decimal_round($order.getRealPrice()));
 end
 
-//规则二：所购图书总价在100到200元的优惠20元
-rule "book_discount_2"
-    when
-        $order:Order(originalPrice < 200)
-    then
-        $order.setRealPrice($order.getOriginalPrice() - 20);
-        System.out.println("成功匹配到规则二：所购图书总价在100到200元的优惠20元");
-end
+
