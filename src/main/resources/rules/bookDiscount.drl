@@ -18,6 +18,7 @@ import java.util.Map;
 // - first 2 character = TB and DONE
 // - fifth character = P  done
 function double f_decimal_round(double valueInput) {
+System.out.println("innnnnnnnnnn");
      BigDecimal decimal = new BigDecimal(String.valueOf(valueInput)).setScale(2, BigDecimal.ROUND_HALF_UP);
 	return   decimal.doubleValue();
 }
